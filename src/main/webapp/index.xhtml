@@ -1,0 +1,63 @@
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<title>File Signer</title>
+	</h:head>
+	<h:body>
+		<h:panelGroup id="table">
+			<h:form>
+				<p:dataTable var="sign" value="#{fileUploadBean.signProcesses}">
+					<f:facet name="header">SignFiles</f:facet>
+					<p:column headerText="Id">
+						<h:outputText value="#{sign.signId}" />
+					</p:column>
+					<p:column headerText="File Name">
+						<h:outputText value="#{sign.fileName}" />
+					</p:column>
+					<p:column headerText="PrivateKey Name">
+						<h:outputText value="#{sign.privateKeyName}" />
+					</p:column>
+					<p:column headerText="Signature">
+						<h:outputText value="#{sign.signature}" />
+					</p:column>
+					<p:column headerText="Download origin file">
+						<p:commandButton value="Download" ajax="false"
+							actionListener="#{fileUploadBean.fileSelection(sign.fileName,sign.signId)}">
+							<p:fileDownload value="#{fileUploadBean.fileOut}" />
+						</p:commandButton>
+					</p:column>
+					<p:column headerText="Signate">
+						<p:commandButton value="SignData" ajax="false" update="table"
+							actionListener="#{signGenService.createDigitSignature(sign.signId)}">
+							<p:fileDownload value="#{signGenService.signOut}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</h:panelGroup>
+		<h1>Download Key Pair</h1>
+		<h:form>
+			<p:commandButton value="GetPair" ajax="false"
+				actionListener="#{signGenService.generateKeyPair}">
+				<p:fileDownload value="#{signGenService.keyPairZip}" />
+			</p:commandButton>
+		</h:form>
+		<h1>Upload file</h1>
+		<h:form enctype="multipart/form-data">
+			<p:fileUpload label="Choose file wich will sign"
+				value="#{fileUploadBean.file}" mode="simple" skinSimple="true" />
+			<br />
+			<p:fileUpload label="Choose key for sign"
+				allowTypes="/(\.|\/)(key)$/" update="messages"
+				value="#{fileUploadBean.privateKey}" mode="simple" skinSimple="true" />
+			<br />
+			<p:commandButton value="Sign" ajax="false" update="table"
+				action="#{fileUploadBean.upload}" />
+		</h:form>
+		<p:growl id="messages" showDetail="true" />
+	</h:body>
+</f:view>
