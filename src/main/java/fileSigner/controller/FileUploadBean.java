@@ -38,10 +38,19 @@ public class FileUploadBean {
 
 	private UploadedFile file;
 	private UploadedFile privateKey;
+	private UploadedFile publicKey;
 	private SignProcess selectedSignProcess;
 	private List<SignProcess> signProcesses;
 
 	private StreamedContent fileOut;
+
+	public UploadedFile getPublicKey() {
+		return publicKey;
+	}
+
+	public void setPublicKey(UploadedFile publicKey) {
+		this.publicKey = publicKey;
+	}
 
 	public StreamedContent getFileOut() {
 		return fileOut;
@@ -92,17 +101,21 @@ public class FileUploadBean {
 
 	public void upload() {
 		logger.info("Begin upload file for signing");
-		if (null != file && null != privateKey && file.getSize() != 0 && privateKey.getSize() != 0) {
-			createSign(file, privateKey);
+		if (null != file && null != privateKey && publicKey != null && file.getSize() != 0 && privateKey.getSize() != 0
+				&& publicKey.getSize() != 0) {
+			createSign(file, privateKey, publicKey);
 			FacesMessage message = new FacesMessage("Successful ", file.getFileName() + " is uploaded");
 			FacesContext.getCurrentInstance().addMessage(null, message);
-		} else if (privateKey == null && file.getSize() == 0 ) {
-			FacesMessage message = new FacesMessage("Error",
-					"Please, choose file and pivateKey");
+		} else if (privateKey == null && file.getSize() == 0) {
+			FacesMessage message = new FacesMessage("Error", "Please, choose file and pivateKey");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} else if (privateKey == null) {
 			FacesMessage message = new FacesMessage("Error",
 					"privateKey is empty or wrong format, privateKey has '.key' extention ");
+			FacesContext.getCurrentInstance().addMessage(null, message);
+		} else if (publicKey == null) {
+			FacesMessage message = new FacesMessage("Error",
+					"publicKey is empty or wrong format, publicKey has '.pub' extention ");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} else {
 			FacesMessage message = new FacesMessage("Error", "file not uploading");
@@ -110,16 +123,24 @@ public class FileUploadBean {
 		}
 	}
 
-	private void createSign(UploadedFile file, UploadedFile privateKey) {
+	public void verify() {
+		FacesMessage message = new FacesMessage("Error", "file not passed");
+		FacesContext.getCurrentInstance().addMessage(null, message);
+	}
+
+	private void createSign(UploadedFile file, UploadedFile privateKey, UploadedFile publicKey) {
 		logger.info("begin create sign");
 		SignProcess sign = new SignProcess();
 		sign.setFileName(file.getFileName());
 		sign.setPrivateKeyName(privateKey.getFileName());
+		sign.setPublicKeyName(publicKey.getFileName());
 		try {
 			logger.info("getting data from file");
 			sign.setFileData(file.getInputStream().readAllBytes());
 			logger.info("getting data from privateKey");
 			sign.setPrivateKeyData(privateKey.getInputStream().readAllBytes());
+			logger.info("getting data from pulicKey");
+			sign.setPublicKeyData(publicKey.getInputStream().readAllBytes());
 		} catch (IOException e) {
 			logger.error("Error get data from files ");
 		}

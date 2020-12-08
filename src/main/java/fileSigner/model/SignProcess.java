@@ -19,15 +19,48 @@ public class SignProcess {
 
 	@Column
 	private String privateKeyName;
-	
+
+	@Column
+	private String publicKeyName;
+
 	@Column
 	private byte[] fileData;
 
 	@Column
-	private byte [] privateKeyData;
-	
+	private byte[] publicKeyData;
+
 	@Column
-	private byte [] signature;
+	private byte[] privateKeyData;
+
+	@Column
+	private byte[] signature;
+
+	@Column
+	private String signName;
+
+	public String getPublicKeyName() {
+		return publicKeyName;
+	}
+
+	public void setPublicKeyName(String publicKeyName) {
+		this.publicKeyName = publicKeyName;
+	}
+
+	public byte[] getPublicKeyData() {
+		return publicKeyData;
+	}
+
+	public void setPublicKeyData(byte[] pulicKeyData) {
+		this.publicKeyData = pulicKeyData;
+	}
+
+	public String getSignName() {
+		return signName;
+	}
+
+	public void setSignName(String signName) {
+		this.signName = signName;
+	}
 
 	public byte[] getSignature() {
 		return signature;
@@ -37,19 +70,19 @@ public class SignProcess {
 		this.signature = signature;
 	}
 
-	public byte [] getPrivateKeyData() {
+	public byte[] getPrivateKeyData() {
 		return privateKeyData;
 	}
 
-	public void setPrivateKeyData(byte [] privateKeyData) {
+	public void setPrivateKeyData(byte[] privateKeyData) {
 		this.privateKeyData = privateKeyData;
 	}
 
-	public byte [] getFileData() {
+	public byte[] getFileData() {
 		return fileData;
 	}
 
-	public void setFileData(byte [] fileData) {
+	public void setFileData(byte[] fileData) {
 		this.fileData = fileData;
 	}
 
@@ -76,5 +109,4 @@ public class SignProcess {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-
 }

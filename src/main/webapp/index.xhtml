@@ -22,7 +22,7 @@
 						<h:outputText value="#{sign.privateKeyName}" />
 					</p:column>
 					<p:column headerText="Signature">
-						<h:outputText value="#{sign.signature}" />
+						<h:outputText value="#{sign.signName}" />
 					</p:column>
 					<p:column headerText="Download origin file">
 						<p:commandButton value="Download" ajax="false"
@@ -55,8 +55,28 @@
 				allowTypes="/(\.|\/)(key)$/" update="messages"
 				value="#{fileUploadBean.privateKey}" mode="simple" skinSimple="true" />
 			<br />
+			<p:fileUpload label="Choose public for Archive"
+				allowTypes="/(\.|\/)(pub)$/" update="messages"
+				value="#{fileUploadBean.publicKey}" mode="simple" skinSimple="true" />
+			<br />
 			<p:commandButton value="Sign" ajax="false" update="table"
 				action="#{fileUploadBean.upload}" />
+		</h:form>
+		<h1>Verify file</h1>
+		<h:form enctype="multipart/form-data">
+			<p:fileUpload label="Choose file wich will verify"
+				value="#{fileUploadBean.file}" mode="simple" skinSimple="true" />
+			<br />
+			<p:fileUpload label="Choose sign for verify"
+				allowTypes="/(\.|\/)(key)$/" update="messages"
+				value="#{fileUploadBean.privateKey}" mode="simple" skinSimple="true" />
+			<br />
+			<p:fileUpload label="Choose public for verify"
+				allowTypes="/(\.|\/)(pub)$/" update="messages"
+				value="#{fileUploadBean.publicKey}" mode="simple" skinSimple="true" />
+			<br />
+			<p:commandButton value="Verify" ajax="false" update="table"
+				action="#{fileUploadBean.verify}" />
 		</h:form>
 		<p:growl id="messages" showDetail="true" />
 	</h:body>
