@@ -195,7 +195,7 @@ public class SignGenService {
 
 	public void verify() {
 		logger.info("begin verify");
-		if (null == signVerify || null == publicKey) {
+		if (null == signVerify || null == publicKey || null == signData) {
 			FacesMessage message = new FacesMessage("Error", "not valid files");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} else {
