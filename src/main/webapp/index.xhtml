@@ -65,18 +65,18 @@
 		<h1>Verify file</h1>
 		<h:form enctype="multipart/form-data">
 			<p:fileUpload label="Choose file wich will verify"
-				value="#{fileUploadBean.file}" mode="simple" skinSimple="true" />
+				value="#{signGenService.signData}" mode="simple" skinSimple="true" />
 			<br />
-			<p:fileUpload label="Choose sign for verify"
-				allowTypes="/(\.|\/)(key)$/" update="messages"
-				value="#{fileUploadBean.privateKey}" mode="simple" skinSimple="true" />
+			<p:fileUpload label="Choose sign for verify txt"
+				allowTypes="/(\.|\/)(txt)$/" update="messages"
+				value="#{signGenService.signVerify}" mode="simple" skinSimple="true" />
 			<br />
 			<p:fileUpload label="Choose public for verify"
 				allowTypes="/(\.|\/)(pub)$/" update="messages"
-				value="#{fileUploadBean.publicKey}" mode="simple" skinSimple="true" />
+				value="#{signGenService.publicKey}" mode="simple" skinSimple="true" />
 			<br />
 			<p:commandButton value="Verify" ajax="false" update="table"
-				action="#{fileUploadBean.verify}" />
+				action="#{signGenService.verify}" />
 		</h:form>
 		<p:growl id="messages" showDetail="true" />
 	</h:body>

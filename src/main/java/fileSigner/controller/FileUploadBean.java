@@ -37,12 +37,11 @@ public class FileUploadBean {
 	}
 
 	private UploadedFile file;
-	private UploadedFile privateKey;
 	private UploadedFile publicKey;
+	private UploadedFile privateKey;
+	private StreamedContent fileOut;
 	private SignProcess selectedSignProcess;
 	private List<SignProcess> signProcesses;
-
-	private StreamedContent fileOut;
 
 	public UploadedFile getPublicKey() {
 		return publicKey;
@@ -121,11 +120,6 @@ public class FileUploadBean {
 			FacesMessage message = new FacesMessage("Error", "file not uploading");
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		}
-	}
-
-	public void verify() {
-		FacesMessage message = new FacesMessage("Error", "file not passed");
-		FacesContext.getCurrentInstance().addMessage(null, message);
 	}
 
 	private void createSign(UploadedFile file, UploadedFile privateKey, UploadedFile publicKey) {
