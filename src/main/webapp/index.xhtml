@@ -52,11 +52,9 @@
 				value="#{fileUploadBean.file}" mode="simple" skinSimple="true" />
 			<br />
 			<p:fileUpload label="Choose key for sign"
-				allowTypes="/(\.|\/)(key)$/" update="messages"
 				value="#{fileUploadBean.privateKey}" mode="simple" skinSimple="true" />
 			<br />
 			<p:fileUpload label="Choose public for Archive"
-				allowTypes="/(\.|\/)(pub)$/" update="messages"
 				value="#{fileUploadBean.publicKey}" mode="simple" skinSimple="true" />
 			<br />
 			<p:commandButton value="Sign" ajax="false" update="table"
@@ -68,11 +66,9 @@
 				value="#{signGenService.signData}" mode="simple" skinSimple="true" />
 			<br />
 			<p:fileUpload label="Choose sign for verify txt"
-				allowTypes="/(\.|\/)(txt)$/" update="messages"
 				value="#{signGenService.signVerify}" mode="simple" skinSimple="true" />
 			<br />
 			<p:fileUpload label="Choose public for verify"
-				allowTypes="/(\.|\/)(pub)$/" update="messages"
 				value="#{signGenService.publicKey}" mode="simple" skinSimple="true" />
 			<br />
 			<p:commandButton value="Verify" ajax="false" update="table"
