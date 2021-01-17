@@ -1,5 +1,6 @@
 package fileSigner;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -27,7 +28,8 @@ import fileSigner.service.SignService;
 public class SignServiceTest {
 
 	private static final String TYPE = "application/octet-stream";
-	private static final String signId = "3";
+	private static final String SIGN_ID_SIGNED = "3";
+	private static final String SIGN_ID_UNSIGNED = "2";
 	private static final Logger logger = LogManager.getLogger(SignServiceTest.class);
 	private static SignProcess signProc;
 
@@ -54,8 +56,10 @@ public class SignServiceTest {
 		logger.info("****************************************************");
 		logger.info("");
 		assertTrue(notEmptyGeneratedKeyPairZipContent());
-		assertTrue(filesForVeryfyTestIsPresent());
+		assertTrue(filesForVeryfyTestIsPresent(SIGN_ID_SIGNED));
 		assertTrue(filesVerifyed());
+		assertTrue(filesForVeryfyTestIsPresent(SIGN_ID_UNSIGNED));
+		assertFalse(filesVerifyed());
 		logger.info("");
 		logger.info("****************************************************");
 		logger.info("************Finish generateKeyPairTest**************");
@@ -65,20 +69,22 @@ public class SignServiceTest {
 	private boolean filesVerifyed() {
 		logger.info("=======Begin  filesVerifyed========================");
 		boolean isVerify = false;
-		signGenServ.setPublicKey(
-				new ByteArrayUploadedFile(signProc.getPublicKeyData(), signProc.getPublicKeyName(), TYPE));
-		signGenServ.setSignVerify(new ByteArrayUploadedFile(signProc.getSignature(), signProc.getSignName(), TYPE));
-		signGenServ.setSignData(new ByteArrayUploadedFile(signProc.getFileData(), signProc.getFileName(), TYPE));
 		try {
+			signGenServ.setPublicKey(
+					new ByteArrayUploadedFile(signProc.getPublicKeyData(), signProc.getPublicKeyName(), TYPE));
+			signGenServ.setSignVerify(new ByteArrayUploadedFile(signProc.getSignature(), signProc.getSignName(), TYPE));
+			signGenServ.setSignData(new ByteArrayUploadedFile(signProc.getFileData(), signProc.getFileName(), TYPE));
 			isVerify = signGenServ.verifyData();
-		} catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | SignatureException e) {
-			e.printStackTrace();
+		} catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | SignatureException
+				| NullPointerException e) {
+			logger.error("VERIFY ERROR check files data");
 		}
+		logger.info("sign verify result: " + isVerify);
 		logger.info("=======Finish filesVerifyed========================");
 		return isVerify;
 	}
 
-	private boolean filesForVeryfyTestIsPresent() {
+	private boolean filesForVeryfyTestIsPresent(String signId) {
 		logger.info("=======Begin  filesForVeryfyTestIsPresent==========");
 		Optional<SignProcess> signProcList = service.getSignById(Long.valueOf(signId));
 		signProc = signProcList.get();
