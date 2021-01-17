@@ -3,21 +3,39 @@ package fileSigner;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Optional;
+
+import javax.inject.Inject;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.assertj.core.util.Strings;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import fileSigner.model.SignProcess;
 import fileSigner.service.SignGenService;
+import fileSigner.service.SignService;
 
 @SpringBootTest
 public class SignServiceTest {
 
+	private static final String TYPE = "application/octet-stream";
+	private static final String signId = "3";
 	private static final Logger logger = LogManager.getLogger(SignServiceTest.class);
-	private SignGenService signService;
+	private static SignProcess signProc;
+
+	@Inject
+	SignGenService signGenServ;
+
+	@Inject
+	SignService service;
 
 	@BeforeAll
 	static void setup() {
@@ -46,28 +64,42 @@ public class SignServiceTest {
 
 	private boolean filesVerifyed() {
 		logger.info("=======Begin  filesVerifyed========================");
+		boolean isVerify = false;
+		signGenServ.setPublicKey(
+				new ByteArrayUploadedFile(signProc.getPublicKeyData(), signProc.getPublicKeyName(), TYPE));
+		signGenServ.setSignVerify(new ByteArrayUploadedFile(signProc.getSignature(), signProc.getSignName(), TYPE));
+		signGenServ.setSignData(new ByteArrayUploadedFile(signProc.getFileData(), signProc.getFileName(), TYPE));
+		try {
+			isVerify = signGenServ.verifyData();
+		} catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | SignatureException e) {
+			e.printStackTrace();
+		}
 		logger.info("=======Finish filesVerifyed========================");
-		return true;
+		return isVerify;
 	}
 
 	private boolean filesForVeryfyTestIsPresent() {
 		logger.info("=======Begin  filesForVeryfyTestIsPresent==========");
+		Optional<SignProcess> signProcList = service.getSignById(Long.valueOf(signId));
+		signProc = signProcList.get();
+		logger.info("Sign process FielName: {}", signProc.getFileName());
+		logger.info("Sign process SignName: {}", signProc.getSignName());
+		logger.info("Sign process PublicKeyName: {}", signProc.getPublicKeyName());
 		logger.info("=======Finish filesForVeryfyTestIsPresent==========");
-		return true;
+		return !Strings.isNullOrEmpty(signProc.getFileData().toString());
 	}
 
 	@SuppressWarnings("resource")
 	private boolean notEmptyGeneratedKeyPairZipContent() {
 		logger.info("=======Begin  generatedKeyPair=====================");
-		signService = new SignGenService();
-		signService.init();
-		signService.generateKeyPair();
+		signGenServ.generateKeyPair();
 		int contentSize = 0;
 		try {
-			contentSize = signService.getKeyPairZip().getStream().readAllBytes().length;
+			contentSize = signGenServ.getKeyPairZip().getStream().readAllBytes().length;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		logger.info("Generated file Name {}", signGenServ.getKeyPairZip().getName());
 		logger.info("=======Finish generatedKeyPair=====================");
 		return contentSize != 0;
 	}

@@ -51,6 +51,7 @@ public class SignGenService {
 	private UploadedFile publicKey;
 	private UploadedFile signVerify;
 	private UploadedFile signData;
+	private Boolean isVerify;
 
 	public UploadedFile getSignData() {
 		return signData;
@@ -200,13 +201,7 @@ public class SignGenService {
 			FacesContext.getCurrentInstance().addMessage(null, message);
 		} else {
 			try {
-				X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(publicKey.getContent());
-				Signature signature = Signature.getInstance(SIGNING_ALGORITHM);
-				PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
-				signature.initVerify(pubKey);
-				signature.update(signData.getContent());
-				boolean isVerify = signature.verify(signVerify.getContent());
-				logger.info("sign verifyed: " + isVerify);
+				verifyData();
 				if (isVerify) {
 					FacesMessage message = new FacesMessage("Info", "Sign verify success");
 					FacesContext.getCurrentInstance().addMessage(null, message);
@@ -221,5 +216,17 @@ public class SignGenService {
 			}
 		}
 		logger.info("End verify");
+	}
+
+	public boolean verifyData()
+			throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, SignatureException {
+		X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(publicKey.getContent());
+		Signature signature = Signature.getInstance(SIGNING_ALGORITHM);
+		PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
+		signature.initVerify(pubKey);
+		signature.update(signData.getContent());
+		isVerify = signature.verify(signVerify.getContent());
+		logger.info("sign verifyed: " + isVerify);
+		return isVerify;
 	}
 }

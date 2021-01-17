@@ -23,15 +23,17 @@ public class SignService {
 	public List<SignProcess> allSignes() {
 		logger.info("begin allSignes()");
 		List<SignProcess> signPocesses = repository.findAll();
+		logger.info("list size: {}", signPocesses.size());
 		return signPocesses;
 	}
 	
 	public void save(SignProcess sign) {
-		logger.info("Save sign ");
+		logger.info("Save sign with FileName {}", sign.getFileName());
 		repository.save(sign);
 	}
 	
 	public Optional<SignProcess> getSignById(Long id) {
+		logger.info("getSignById {}", id);
 		return repository.findById(id);
 	}
 }
