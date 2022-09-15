@@ -12,12 +12,12 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.assertj.core.util.Strings;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import fileSigner.model.SignProcess;
@@ -30,7 +30,7 @@ public class SignServiceTest {
 	private static final String TYPE = "application/octet-stream";
 	private static final String SIGN_ID_SIGNED = "3";
 	private static final String SIGN_ID_UNSIGNED = "2";
-	private static final Logger logger = LogManager.getLogger(SignServiceTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(SignServiceTest.class);
 	private static SignProcess signProc;
 
 	@Inject

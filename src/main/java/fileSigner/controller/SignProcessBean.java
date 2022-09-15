@@ -7,8 +7,8 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fileSigner.model.SignProcess;
 import fileSigner.service.SignService;
@@ -17,7 +17,7 @@ import fileSigner.service.SignService;
 @ViewScoped
 public class SignProcessBean {
 
-	private static final Logger logger = LogManager.getLogger(SignProcessBean.class);
+	private static final Logger logger = LoggerFactory.getLogger(SignProcessBean.class);
 
 	private List<SignProcess> signProcesses;
 

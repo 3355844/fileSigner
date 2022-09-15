@@ -11,11 +11,11 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.annotation.SessionScope;
 
 import fileSigner.model.SignProcess;
@@ -25,7 +25,7 @@ import fileSigner.service.SignService;
 @SessionScope
 public class FileUploadBean {
 
-	private static final Logger logger = LogManager.getLogger(FileUploadBean.class);
+	private static final Logger logger = LoggerFactory.getLogger(FileUploadBean.class);
 
 	@Inject
 	private SignService service;

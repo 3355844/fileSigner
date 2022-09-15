@@ -6,8 +6,8 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fileSigner.model.SignProcess;
 import fileSigner.repository.SignProcessRepositroy;
@@ -15,7 +15,7 @@ import fileSigner.repository.SignProcessRepositroy;
 @Named
 public class SignService {
 
-	private static final Logger logger = LogManager.getLogger(SignService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SignService.class);
 
 	@Inject
 	private SignProcessRepositroy repository;

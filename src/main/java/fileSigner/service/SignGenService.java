@@ -27,11 +27,11 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.annotation.SessionScope;
 
 import fileSigner.model.SignProcess;
@@ -40,7 +40,7 @@ import fileSigner.model.SignProcess;
 @SessionScope
 public class SignGenService {
 
-	private static final Logger logger = LogManager.getLogger(SignGenService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SignGenService.class);
 	private static final String SIGNING_ALGORITHM = "SHA256withRSA";
 	private static final String RSA = "RSA";
 	private KeyFactory keyFactory;
